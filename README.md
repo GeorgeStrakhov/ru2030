@@ -80,6 +80,7 @@
 * Нет "слежки" за топиками и ни за чем остальным
 
 ##nextUp
+* edit & delete my own items & comments
 * admin tool to delete certain items and comments individually. don't forget to delete comments corresponding to items when deleting items.
 * basic pagination for comments and items ("load more" button based on session variable ("currentLimit")) - don't forget to make it go back to "10" whenever router is called or sortBy is changed
 * search on the main page (items + comments) + pagination for search results (same session variable)
