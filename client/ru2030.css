@@ -1,0 +1,101 @@
+html, body {
+  height: 100%;
+  /* The html and body elements cannot have any padding or margin. */
+}
+
+/* Wrapper for page content to push down footer */
+#wrap {
+  min-height: 100%;
+  height: auto !important;
+  height: 100%;
+  /* Negative indent footer by it's height */
+  margin: 0 auto -40px;
+}
+
+/* Set the fixed height of the footer here */
+#push,
+#footer {
+  height: 40px;
+}
+#footer {
+  background-color: #f5f5f5;
+}
+
+.credit {
+  width: auto;
+  padding-top: 10px;
+}
+
+.centered {
+  text-align: center;
+}
+
+.alignRight {
+  text-align: right;
+}
+
+.singleItemRow {
+  margin-bottom: 0px;
+}
+
+.lineAfter {
+
+}
+
+.thumbsUpDown {
+  margin-left: 6px;
+  margin-right: 0px;
+}
+
+.discussionLink {
+  margin-top: 4px;
+  margin-bottom: 6px;
+}
+
+.topSpace {
+  margin-top: 30px;
+}
+
+.marginTB {
+  margin-top: 15px;
+  margin-bottom:15px;
+}
+
+.marginDown {
+  margin-bottom: 8px;
+}
+
+#innerContent {
+  padding-top:60px;
+}
+
+/* Lastly, apply responsive CSS fixes as necessary */
+@media (max-width: 767px) {
+  #innerContent {
+    padding-top:0px;
+  }
+  
+  #footer {
+    margin-left: -20px;
+    margin-right: -20px;
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+}
+
+#loading{
+    width:100px;
+    height: 100px;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    background:url(/img/loader.gif) no-repeat center #fff;
+    text-align:center;
+    padding:10px;
+    margin-left: -50px;
+    margin-top: -50px;
+    z-index:100;
+    overflow: auto;
+    border-radius: 10px;
+    border: 1px solid black;
+}
