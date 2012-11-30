@@ -54,7 +54,16 @@
 
 <template name="footer">
   <div id="footer">
-    <p class="muted credit centered"> &copy; 2012 - Хорошие Ребята | <a href="#settings">настройки</a> | <a href="#admin" class="muted">admin</a> </p>
+    <p class="muted credit centered">
+      2012 
+      | <a rel="license" href="http://creativecommons.org/licenses/by/3.0/deed.en_US" class="muted">Some Rights Reserved</a>
+      {{#if currentUser}}
+        | <a class="muted" href="#settings">settings</a>
+      {{/if}}
+      {{#if userRole "superAdmin"}}
+        | <a href="#admin" class="muted" class="muted">admin</a>
+      {{/if}}
+      </p>
   </div>
 </template>
 
@@ -81,6 +90,14 @@
             </div>
           </form>
         </div>
+        <div>
+          <hr />
+        </div>
+        <div>
+          <form class="form">
+            <button class="btn btn-danger" id="userDelete">удалить мой аккаунт</button>
+          </form>
+        </div>
     </div>
   </div>
 </template>
@@ -94,7 +111,13 @@
     </div>
     <div class="row">
       <div class="span12 centered topSpace">
-        <p class="well">что-то о проекте бла бла</p>
+        <div class="well" style="text-align: left">
+          <p>Есть страны, которые <strong>любишь</strong>, а есть страны, в которых <strong>хочется жить и растить детей</strong>.</p>
+          <p>Мы все <strong>любим</strong> Россию потому, что мы здесь родились, потому что здесь наши близкие, потому что мы думаем на русском языке и читаем русскую литературу...</p>
+          <p>Но зачастую, приезжая, например, в Европу, мы понимаем, что вот <strong>здесь хотелось бы жить</strong> и растить детей. Потому, что безопасно, государство тихо делает свою работу, люди на улицах улыбаются и т.д.</p>
+          <p>Проект <strong>Россия 2030 - это попытка представить себе Россию такой, в которой нам хотелось бы жить</strong>. Не мечтать о ней, а представить ее, конкретно описать ее. А затем понять, что для этого нужно сделать и кто мог бы объединить нас и воплотить это в жизнь.</p>
+          <p>В нашем обществе достаточно разговоров о негативных факторах и сценариях развития событий. Давайте попробуем <strong>продуктивно подискутировать на тему позитивного будущего страны и как к нему прийти</strong>.</p>
+        </div>
       </div>
     </div>
     <div class="row">
@@ -132,8 +155,27 @@
 </template>
 
 <template name="main">
-  здесь интро к проекту и объяснение трех листов.
-  в будущем здесь еще возможность создать новый
+
+      <div class="hero-unit">
+        <h1>Россия 2030</h1>
+        <p>Что должно быть и чего не должно быть в России через 17 лет, чтобы Вам хотелось жить и растить детей здесь и нигде больше? Чего реалистично достигнуть в такой срок? Какие действия каждый из нас и мы все вместе можем предпринять, чтобы приблизиться к этому?</p>
+        <p><a class="btn btn-primary btn-large" href="#/list/country/">Вступить в диалог &raquo;</a></p>
+      </div>
+
+      <div class="row">
+        <div class="span4">
+          <h2><a class="" href="#/list/country/">Страна</a></h2>
+          <p>В какой России Вам хотелось бы жить? Попробуйте описать ее, возможно она станет ближе и понятней.</p>
+        </div>
+        <div class="span4">
+          <h2><a class="" href="#/list/actions/">Действия</a></h2>
+          <p>Что нужно сделать, чтобы жизнь в России улучшилась? Что может сделать государство, бизнес, каждый из нас?</p>
+       </div>
+        <div class="span4">
+          <h2><a class="" href="#/list/leaders/">Лидеры</a></h2>
+          <p>Кто может объединить думающих и небезразличных людей страны и сделать "Россию 2030" реальностью?</p>
+        </div>
+      </div>
 </template>
 
 <template name="admin">
@@ -225,7 +267,7 @@
       </div>
       <div>
         <form class="form">
-          <textarea class="span12" id="newItemText"></textarea>
+          <textarea class="span12" id="newItemText" {{#if currentList.halfSentence}}placeHolder="(продолжите предложение)"{{/if}}></textarea>
           <button class="btn btn-large btn-block" id="newItemSubmit">отправить</button>
         </form>
       </div>

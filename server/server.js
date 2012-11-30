@@ -7,8 +7,8 @@ var localhostFacebook = {
 };
 
 var remoteFacebook = {
-  appId: "",
-  secret: ""
+  appId: "202494326542199",
+  secret: "2481c239cceb5bae10bc60e97d2df779"
 };
 
 ////////INITIALIZE//////////
@@ -27,6 +27,12 @@ Accounts.onCreateUser(function(options, user) {
     user.displayName = user.profile.name;
   }
   user.email = user.services.facebook.email;
+  Email.send({
+    from : "russia2030project@gmail.com",
+    to : user.email,
+    subject: "Добро пожаловать в Россию 2030!",
+    html: '<!DOCTYPE HTML><html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><body><p>Спасибо за то, что Вы присоединились к России 2030.</p><p>Вы всегда можете отредактировать или удалить Ваш профайл <a href="'+Meteor.absoluteUrl()+'#settings">здесь</a>.</p><p>Если у Вас есть вопросы - просто ответьте на это письмо.</p><p>С уважением,</p><p><a href="'+Meteor.absoluteUrl()+'">Россия 2030</a></p></body></html>',
+  });
   return user;
 });
 
@@ -215,6 +221,35 @@ Meteor.methods({
     }});
     return "list "+theList.name+" successfully updated";
   },
+  'userDelete' : function() {
+    if(!this.userId) {
+      throw new Meteor.Error(400, 'you have to be logged in!');
+    }
+    Items.remove({by: this.userId});//delete all the items by this user
+    Comments.remove({by: this.userId});//delete all the comments by this user
+    Items.update(//update all items the user has voted up on - decrease rating
+      {plusOnes: this.userId},
+      {$inc: {rating: -1}},
+      {multi: true}
+    );
+    Items.update(//update all items that the user has voted up on - delete the vote ups
+      {plusOnes: this.userId},
+      {$pull: {plusOnes: this.userId}},
+      {multi: true}
+    );
+    Items.update(//update all items the user has voted up down - increase rating
+      {minusOnes: this.userId},
+      {$inc: {rating: 1}},
+      {multi: true}
+    );
+    Items.update(//update all items that the user has voted down on - delete the vote downs
+      {minusOnes: this.userId},
+      {$pull: {minusOnes: this.userId}},
+      {multi: true}
+    );
+    Meteor.users.remove({_id: this.userId});//delete the user himself
+    return 'all deleted';
+  },
   'cleanUpDb' : function(which) {
     if(!this.userId) {
       throw new Meteor.Error(400, 'you are not logged in');
@@ -240,7 +275,7 @@ Meteor.methods({
       Items.remove({});
       Lists.remove({});
       Comments.remove({});
-      Meteor.users.remove({userRole: "role"});
+      Meteor.users.remove({userRole: "user"});
     } else {
       throw new Meteor.Error(400, 'action is not supported');
       return;

@@ -94,7 +94,8 @@ Meteor.autosubscribe(function() {
 
 ///////////SITE-WIDE HANDLEBARS HELPERS//////////
 Handlebars.registerHelper("userRole", function(which) {
-  return Meteor.user().userRole == which;
+  if(Meteor.user())
+    return Meteor.user().userRole == which;
 });
 
 Handlebars.registerHelper("currentView", function(which) {
@@ -203,7 +204,7 @@ Template.item.itemDetails = function() {
 Template.item.itemComments = function() {
   if(Items.findOne(Session.get("currentItem")._id)) {
     if(Comments.findOne({belongsTo: Session.get("currentItem")._id})) {
-      console.log(Session.get("sortBy"));
+      //console.log(Session.get("sortBy"));
       if(Session.get("sortBy") == "popular") {
         return Comments.find({belongsTo: Session.get("currentItem")._id},{sort: {rating: -1}}); //sorting by rating
       } else {
@@ -246,14 +247,17 @@ Template.item.events = {
 };
 
 Template.singleComment.comment = function() {
+  //console.log(this);
   var comment = {};
-  comment.author = Meteor.users.findOne(this.by).displayName;
-  if(this.rating > 0){
-    comment.ratingStyle = "label-success";
-    comment.rating = "+"+this.rating;
-  } else {
-    comment.ratingStyle = "label-important";
-    comment.rating = this.rating;
+  if(Meteor.users.findOne(this.by)) {
+    comment.author = Meteor.users.findOne(this.by).displayName;
+    if(this.rating > 0){
+      comment.ratingStyle = "label-success";
+      comment.rating = "+"+this.rating;
+    } else {
+      comment.ratingStyle = "label-important";
+      comment.rating = this.rating;
+    }
   }
   return comment;
 };
@@ -305,6 +309,21 @@ Template.settings.events = {
   'click #userSaveSettings' : function(e) {
     e.preventDefault();
     Meteor.call('userChangeSettings', $("#userDisaplayName").val(), $("#userEmail").val(), function(error, result){notifyCallRes(error,result);});
+  },
+  'click #userDelete' : function() {
+    var sure = prompt("Вместе с Вашим аккаунтом будут удалены все записи и все комментарии. Их потом нельзя будет вернуть. Вы уверены? Напишите 'да' внизу если Вы хотите удалить свой акааунт и все с ним связанное.");
+    if(sure == "да" || sure == "Да" || sure == "ДА") {
+      Meteor.call('userDelete', function(error, result) {
+        if(error)
+          notify('error', error.reason);
+        if(result) {
+          notify('success', "Ваш аккаунт успешно удален");
+          Meteor.setTimeout(Router.navigate("/", true), 1000);
+        }  
+      });
+    } else {
+      notify('success', "ну вот и слава Богу");
+    }
   },
 };
 
