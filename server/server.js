@@ -61,8 +61,12 @@ Meteor.publish("allUsers", function() {
   return Meteor.users.find({}, {fields: {
     userRole: 1,
     displayName: 1,
-    profile: 1,
-    email: 1,
+  }});
+});
+
+Meteor.publish("myEmail", function() {
+  return Meteor.users.find(this.userId, {fields: {
+    email: 1
   }});
 });
 
@@ -92,7 +96,7 @@ Meteor.methods({
     }
     itemContent = itemContent.toString();
     if(itemContent == "") {
-      throw new Meteor.Error(400, 'text can\'t be blank');
+      throw new Meteor.Error(400, 'текст не может быть пустым');
       return;
     }
     var d = new Date();
@@ -110,30 +114,32 @@ Meteor.methods({
     });
     if(newItem)
       return newItem;
-    else
-      return "sorry an error occured. please try again later";
+    else {
+      throw new Meteor.Error(400, "извините, произошла ошибка. попробуйте снова немного позже.");
+      return;
+    }
   },
   'userChangeSettings' : function(name, email) {
     var theUser = Meteor.users.findOne(this.userId);
     //console.log(theUser.displayName);
     if((name == "") || (email == "")) {
-      throw new Meteor.Error(400, 'name or email can\'t be empty');
+      throw new Meteor.Error(400, 'нужно заполнить и имя и электронную почту');
       return;
     }
     if(name == "admin") {
-      throw new Meteor.Error(400, 'this name is not allowed');
+      throw new Meteor.Error(400, 'такое имя выбрать нельзя, пожалуйста, придумайте другое');
       return;
     }
     if(Meteor.users.findOne({displayName: name}) && !(name == theUser.displayName)) {
-      throw new Meteor.Error(400, 'this name is already taken');
+      throw new Meteor.Error(400, 'такое имя уже использует один из пользователей');
       return;
     }
     if(Meteor.users.findOne({email: email}) && !(email == theUser.email)) {
-      throw new Meteor.Error(400, 'this email is already taken');
+      throw new Meteor.Error(400, 'пользователь с такой электронной почтой уже есть');
       return;
     };
     Meteor.users.update(this.userId, {$set: {displayName: name, email: email}});
-    return "settings saved";
+    return "изменения сохранены";
   },
   'changeUserRole' : function(email, newRole) {
     if(!newRole || !email) {
@@ -292,11 +298,11 @@ Meteor.methods({
       return;
     }
     if(Items.findOne(itemId).by == this.userId) {
-      throw new Meteor.Error(400, 'you can\'t vote for your own item');
+      throw new Meteor.Error(400, 'голосовать за свою собственную запись нельзя');
       return;
     }
     if(Items.findOne({_id: itemId, minusOnes: this.userId}) || Items.findOne({_id: itemId, plusOnes: this.userId})) {
-      throw new Meteor.Error(400, 'you can only vote once');
+      throw new Meteor.Error(400, 'голосовать можно только один раз');
       return;
     }
     if(upOrDown == "up") {
@@ -319,7 +325,7 @@ Meteor.methods({
       return;
     }
     if(!comment) {
-      throw new Meteor.Error(400, 'comment can\'t be blank');
+      throw new Meteor.Error(400, 'пожалуйста, напишите что-нибудь ');
       return;
     }
     if(inResponseTo) {
@@ -364,11 +370,11 @@ Meteor.methods({
       return;
     }
     if(Comments.findOne(comment._id).by == this.userId) {
-      throw new Meteor.Error(400, 'you can\'t vote for your own comment');
+      throw new Meteor.Error(400, 'голосовать за свой собственный комментарий нельзя');
       return;
     }
     if(Comments.findOne({_id: comment._id, minusOnes: this.userId}) || Comments.findOne({_id: comment._id, plusOnes: this.userId})) {
-      throw new Meteor.Error(400, 'you can only vote once');
+      throw new Meteor.Error(400, 'голосовать можно только один раз');
       return;
     }
     if (doWhat == "up") {

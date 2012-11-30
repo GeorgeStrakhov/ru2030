@@ -58,7 +58,7 @@
       2012 
       | <a rel="license" href="http://creativecommons.org/licenses/by/3.0/deed.en_US" class="muted">Some Rights Reserved</a>
       {{#if currentUser}}
-        | <a class="muted" href="#settings">settings</a>
+        | <a class="muted" href="#settings">настройки</a>
       {{/if}}
       {{#if userRole "superAdmin"}}
         | <a href="#admin" class="muted" class="muted">admin</a>
@@ -84,7 +84,7 @@
               <input type="text" class="input" id="userDisaplayName" value="{{userName}}" />
             </div>
             <label>Ваш адрес электронной почты:</label>
-              <input type="text" class="input" id="userEmail" value="{{userEmail}}" />
+              <input type="text" class="input" id="userEmail" value="{{myEmail}}" />
             <div>
               <button class="btn" id="userSaveSettings">сохранить</button>
             </div>

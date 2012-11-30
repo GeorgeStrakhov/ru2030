@@ -1,7 +1,7 @@
 #Россия 2030
 Прототип онлайн проекта, который позволит думающей и небезразличной части Российского общества просто и продуктивно дискутировать на тему позитивного будущего страны и как к нему прийти.
 
-Доступно в онлайн по адресу: http://ru2030.meteor.com
+Доступно в онлайн по адресу: http://www.ru2030.meteor.com
 
 ##Логика
 Все, что есть на сайте - это коллаборативные списки.
@@ -80,8 +80,11 @@
 * Нет "слежки" за топиками и ни за чем остальным
 
 ##nextUp
-* pagination for comments and items
-* search on the main page (items + comments) + pagination for results
+* admin tool to delete certain items and comments individually. don't forget to delete comments corresponding to items when deleting items.
+* basic pagination for comments and items ("load more" button based on session variable ("currentLimit")) - don't forget to make it go back to "10" whenever router is called or sortBy is changed
+* search on the main page (items + comments) + pagination for search results (same session variable)
+* basic watch logic (send email when the item I'm watching is commented)
+* threaded comments (make sure there is maxLevel)
 
 ##knownBugs
 * flashing in Firefox (template-rerendering when going through the router)

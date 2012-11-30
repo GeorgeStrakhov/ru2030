@@ -85,6 +85,7 @@ Meteor.subscribe("allUsers");
 Meteor.subscribe("lists");
 Meteor.subscribe("items");
 Meteor.subscribe("comments");
+Meteor.subscribe("myEmail");
 
 ////////////REACTIVE AUTOSUBSCRIBE HELPERS//////////
 Meteor.autosubscribe(function() {
@@ -93,6 +94,10 @@ Meteor.autosubscribe(function() {
 });
 
 ///////////SITE-WIDE HANDLEBARS HELPERS//////////
+Handlebars.registerHelper("myEmail", function() {
+  return Meteor.user().email;
+});
+
 Handlebars.registerHelper("userRole", function(which) {
   if(Meteor.user())
     return Meteor.user().userRole == which;
